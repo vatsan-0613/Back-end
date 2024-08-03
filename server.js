@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const nodemail = require("nodemailer");
 const otpGenerator = require("otp-generator");
-const ConvSummaryModel = require("models/convSummary.js");
-const patientdetailModel = require("models/patientDetails.js");
+const ConvSummaryModel = require("./models/convSummary.js");
+const patientdetailModel = require("./models/patientDetails.js");
 require("dotenv").config();
 
 const app = express();
