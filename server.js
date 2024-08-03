@@ -87,7 +87,14 @@ const patientdetailModel = mongoose.model("patient-data", patientDetailSchema);
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cors());
+
+const corsOptions = {
+  origin: 'https://back-end-1-9ae3.onrender.com', // Replace with the actual origin of your frontend application
+  optionsSuccessStatus: 200, // Some legacy browsers (IE11) may not understand 204
+};
+
+app.use(cors(corsOptions));
+
 
 const otpconfig = {
   upperCaseAlphabets: false,
