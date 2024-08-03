@@ -89,7 +89,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 
 const corsOptions = {
-  origin: 'https://back-end-1-9ae3.onrender.com', // Replace with the actual origin of your frontend application
+  origin: 'https://patient-ehr.vercel.app', // Replace with the actual origin of your frontend application
   optionsSuccessStatus: 200, // Some legacy browsers (IE11) may not understand 204
 };
 
