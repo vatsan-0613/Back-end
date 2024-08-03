@@ -4,9 +4,85 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const nodemail = require("nodemailer");
 const otpGenerator = require("otp-generator");
-const ConvSummaryModel = require("./models/convSummary.js");
-const patientdetailModel = require("./models/patientDetails.js");
 require("dotenv").config();
+
+const convSummarySchema = new mongoose.Schema({
+  patientId: {
+    type: Number,
+    required: true,
+  },
+  hospitalId: {
+    type: Number,
+    required: true,
+  },
+  doctorName: {
+    type: String,
+    required: true,
+  },
+  doctorSummary: {
+    type: String,
+    required: true,
+  },
+  patientSummary: {
+    summaryText: {
+      type: String,
+      required: true,
+    },
+    indices: [
+      {
+        type: [String],
+        required: true,
+      },
+    ],
+    meanings: [
+      {
+        type: [String],
+        required: true,
+      },
+    ],
+  },
+  Date: {
+    type: String,
+    required: true,
+  },
+});
+
+const ConvSummaryModel = mongoose.model("conv-summary", convSummarySchema);
+
+const patientSchema = new mongoose.Schema({
+  email: String,
+  password: String,
+});
+
+const patientModel = mongoose.model("patient", patientSchema);
+
+const patientDetailSchema = new mongoose.Schema({
+  phone: Number,
+  patientName: String,
+  email: String,
+  patientId: Number,
+});
+
+patientDetailSchema.pre("save", async function (next) {
+  try {
+    if (!this.isNew) {
+      return next();
+    }
+    const lastPatient = await this.constructor.findOne(
+      {},
+      { patientId: 1 },
+      { sort: { patientId: -1 } }
+    );
+    const newPatientId =
+      lastPatient && lastPatient.patientId ? lastPatient.patientId + 1 : 1;
+    this.patientId = newPatientId;
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+const patientdetailModel = mongoose.model("patient-data", patientDetailSchema);
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
